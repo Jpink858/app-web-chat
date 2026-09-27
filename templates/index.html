@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chat en Tiempo Real</title>
+</head>
+
+<body>
+
+    <h1>Chat Socket - Tiempo Real</h1>
+    <p id="usuario"></p>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+    <!-- Área donde aparecerán los mensajes -->
+    <div id="mensajes"></div>
+
+    <br>
+
+    <!-- Campo para escribir -->
+    <input
+        type="text"
+        id="mensaje"
+        placeholder="Ingrese su mensaje"
+    >
+
+    <!-- Botón -->
+    <button onclick="enviar()">
+        Enviar
+    </button>
+
+
+    <!-- Librería Socket.IO -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+ 
+  const firebaseConfig = {
+    
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth=getAuth(app);
+  //Comprobar la autentificacion 
+  onAuthStateChanged(auth, function(usuario){
+    if(usuario){
+        document.getElementById("usuario").innerText="Usuario: "+usuario.email;
+        console.log("Usuario Autentificado: ",usuario.email);
+    } else{
+        window.location.href="/";
+    }
+  });
+  //Cerrar Session
+  window.cerrarSesion=async function(){
+    await signOut(auth);
+    window.location.href="/"
+  }
+
+  </script>
+
+    <script>
+
+        // Paso 1. Conectarse al servidor Socket.IO
+        const socket = io();
+
+
+        // Paso 2. Escuchar los mensajes enviados por el servidor
+        socket.on("mensaje", function(mensaje) {
+
+            // Crear un elemento <p>
+            let nuevo = document.createElement("p");
+
+            // Colocar el mensaje
+            nuevo.innerText = mensaje;
+
+            // Agregarlo al div
+            document
+                .getElementById("mensajes")
+                .appendChild(nuevo);
+        });
+
+
+        // Paso 3. Función para enviar mensajes
+        function enviar() {
+
+            // Obtener el texto
+            let mensaje = document
+                .getElementById("mensaje")
+                .value;
+
+
+            // Verificar que no esté vacío
+            if (mensaje.trim() !== "") {
+
+                // Enviar mensaje al servidor
+                socket.send(mensaje);
+
+                // Limpiar el campo
+                document
+                    .getElementById("mensaje")
+                    .value = "";
+
+            }
+        }
+
+
+        // Paso 4. Permitir enviar presionando ENTER
+        document
+            .getElementById("mensaje")
+            .addEventListener("keypress", function(event) {
+
+                if (event.key === "Enter") {
+                    enviar();
+                }
+
+            });
+
+    </script>
+
+</body>
+
+</html>

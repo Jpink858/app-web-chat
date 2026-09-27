@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Inicio de Sesión</h1>
+    <input type="email" id="correo" placeholder="Ingrese su correo">
+    <br><br>
+    <input type="password" id="password" placeholder="Ingrese su contraseña">
+    <br><br>
+    <button onclick="iniciarSesion()">Iniciar Sesión</button>
+    <p id="resultado"></p>
+
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+ 
+  const firebaseConfig = {
+    
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth=getAuth(app);
+
+  //Funcion para iniciar sesion
+  window.iniciarSesion= async function(){
+    const correo=document.getElementById("correo").value;
+    const password=document.getElementById("password").value;
+    try {
+        const usuario=await signInWithEmailAndPassword(
+            auth,
+            correo,
+            password
+        );
+        console.log("Usuario autentificado...");
+        window.location.href="/chat";
+    } catch(error){
+        console.error(error);
+        document.getElementById("resultado").innerText="Correo o contraseña incorrectos";
+    }
+  };
+</script>
+</body>
+</html>
