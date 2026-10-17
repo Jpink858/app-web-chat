@@ -3,34 +3,252 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Chat en Tiempo Real</title>
+
+    <!-- Fuente Google Fonts estilo cine/moderno -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0a0c16;
+            --bg-card: rgba(20, 24, 45, 0.85);
+            --primary-purple: #8a2be2;
+            --neon-blue: #00d2ff;
+            --neon-purple: #9d4edd;
+            --text-light: #f0f3f8;
+            --text-muted: #8e9bb0;
+            --cinema-red: #e50914;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #1a103c 0%, #0a0c16 70%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Pantalla de cine brillante en el fondo arriba */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 200px;
+            background: linear-gradient(180deg, rgba(0, 210, 255, 0.15) 0%, rgba(157, 78, 221, 0.05) 50%, transparent 100%);
+            filter: blur(40px);
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        /* Contenedor principal estilo VIP Cinema Lounge */
+        .cinema-container {
+            width: 100%;
+            max-width: 550px;
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(157, 78, 221, 0.25);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 
+                        0 0 25px rgba(138, 43, 226, 0.15);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Encabezado */
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            text-align: center;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+        }
+
+        /* Info de usuario y botón de cerrar sesión */
+        .user-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 12, 22, 0.6);
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px;
+        }
+
+        #usuario {
+            font-size: 0.85rem;
+            color: var(--neon-blue);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 65%;
+        }
+
+        /* Botón de Cerrar Sesión con estilo sutil */
+        .user-bar button {
+            background: transparent;
+            color: #ff4d4d;
+            border: 1px solid rgba(255, 77, 77, 0.4);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-bar button:hover {
+            background: rgba(255, 77, 77, 0.15);
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+        }
+
+        /* Área de Mensajes (Sala de chat) */
+        #mensajes {
+            height: 320px;
+            background: rgba(10, 12, 22, 0.8);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+            margin-bottom: 15px;
+        }
+
+        #mensajes::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #mensajes::-webkit-scrollbar-thumb {
+            background: var(--neon-purple);
+            border-radius: 10px;
+        }
+
+        /* Estilo de las burbujas de mensajes */
+        #mensajes p {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.25), rgba(0, 210, 255, 0.15));
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            color: var(--text-light);
+            padding: 10px 14px;
+            border-radius: 14px 14px 14px 2px;
+            font-size: 0.9rem;
+            word-wrap: break-word;
+            max-width: 85%;
+            align-self: flex-start;
+            animation: fadeIn 0.2s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Contenedor de Input + Botón */
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #mensaje {
+            flex: 1;
+            background: rgba(10, 12, 22, 0.9);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #mensaje:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
+        }
+
+        #mensaje::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Botón de Enviar */
+        .input-group button {
+            background: linear-gradient(135deg, var(--neon-purple), var(--primary-purple));
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.4);
+        }
+
+        .input-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+        }
+
+        .input-group button:active {
+            transform: translateY(0);
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Chat Socket - Tiempo Real</h1>
-    <p id="usuario"></p>
-    <button onclick="cerrarSesion()">Cerrar Sesión</button>
-    <!-- Área donde aparecerán los mensajes -->
-    <div id="mensajes"></div>
+    <div class="cinema-container">
+        <h1>Chat Socket - Tiempo Real</h1>
+        
+        <div class="user-bar">
+            <p id="usuario"></p>
+            <button onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
 
-    <br>
+        <!-- Área donde aparecerán los mensajes -->
+        <div id="mensajes"></div>
 
-    <!-- Campo para escribir -->
-    <input
-        type="text"
-        id="mensaje"
-        placeholder="Ingrese su mensaje"
-    >
-
-    <!-- Botón -->
-    <button onclick="enviar()">
-        Enviar
-    </button>
-
+        <!-- Contenedor del Input y Botón -->
+        <div class="input-group">
+            <input
+                type="text"
+                id="mensaje"
+                placeholder="Escribe tu mensaje aquí..."
+            >
+            <button onclick="enviar()">
+                Enviar
+            </button>
+        </div>
+    </div>
 
     <!-- Librería Socket.IO -->
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
@@ -39,9 +257,8 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
  
-  const firebaseConfig = {
-    
-  };
+  // La configuración llega desde app.py (que la lee del archivo .env)
+  const firebaseConfig = {{ firebase_config | tojson }};
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);

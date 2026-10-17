@@ -1,27 +1,181 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Inicio de Sesión - Cine VIP</title>
+
+    <!-- Fuente Google Fonts estilo cine/moderno -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0a0c16;
+            --bg-card: rgba(20, 24, 45, 0.85);
+            --primary-purple: #8a2be2;
+            --neon-blue: #00d2ff;
+            --neon-purple: #9d4edd;
+            --text-light: #f0f3f8;
+            --text-muted: #8e9bb0;
+            --error-red: #ff4d4d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #1a103c 0%, #0a0c16 70%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Iluminación tipo proyector de cine arriba */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 200px;
+            background: linear-gradient(180deg, rgba(0, 210, 255, 0.15) 0%, rgba(157, 78, 221, 0.05) 50%, transparent 100%);
+            filter: blur(40px);
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        /* Contenedor principal de Login */
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(157, 78, 221, 0.25);
+            border-radius: 20px;
+            padding: 35px 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 
+                        0 0 25px rgba(138, 43, 226, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Ícono o detalle cinematográfico */
+        .cinema-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Encabezado */
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            text-align: center;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+        }
+
+        /* Campos de entrada */
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            background: rgba(10, 12, 22, 0.9);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            border-radius: 10px;
+            padding: 14px 16px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.3);
+        }
+
+        input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Botón de Inicio de Sesión */
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--neon-purple), var(--primary-purple));
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.4);
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Mensaje de error / resultado */
+        #resultado {
+            margin-top: 18px;
+            font-size: 0.85rem;
+            color: var(--error-red);
+            text-align: center;
+            min-height: 20px;
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
-    <h1>Inicio de Sesión</h1>
-    <input type="email" id="correo" placeholder="Ingrese su correo">
-    <br><br>
-    <input type="password" id="password" placeholder="Ingrese su contraseña">
-    <br><br>
-    <button onclick="iniciarSesion()">Iniciar Sesión</button>
-    <p id="resultado"></p>
+
+    <div class="login-card">
+        <div class="cinema-icon">🎬</div>
+        <h1>Inicio de Sesión</h1>
+
+        <input type="email" id="correo" placeholder="Ingrese su correo">
+        
+        <input type="password" id="password" placeholder="Ingrese su contraseña">
+        
+        <button onclick="iniciarSesion()">Iniciar Sesión</button>
+        
+        <p id="resultado"></p>
+    </div>
 
     <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
  
-  const firebaseConfig = {
-    
-  };
+  // La configuración llega desde app.py (que la lee del archivo .env)
+  const firebaseConfig = {{ firebase_config | tojson }};
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);

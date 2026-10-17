@@ -1,0 +1,22 @@
+CINEBOT - INFORMACIÓN DE ESTRENOS
+==================================
+
+1. DIGGER
+   Género: Acción / Drama
+   Reparto: Tom Cruise, Sandra Hüller, Riz Ahmed
+   Director: Alejandro González Iñárritu
+   Estreno: 1 de octubre
+
+2. VERITY: LA SOMBRA DE UN ENGAÑO
+   Género: Suspenso / Drama
+   Reparto: Anne Hathaway, Dakota Johnson, Josh Hartnett
+   Basada en la novela de Colleen Hoover
+   Estreno: 1 de octubre
+
+3. STREET FIGHTER
+   Género: Acción / Videojuego
+   Reparto: Noah Centineo, Andrew Koji, Callina Liang
+   Estreno: 15 de octubre
+
+------------------------------------
+CINEBOT - Tu asistente de cine
